@@ -1,2 +1,6 @@
-import { CartItem } from '../models';
-export declare function calculateCartTotal(items: CartItem[]): number;
+export declare function calculateCartTotal(items: {
+    product?: {
+        price?: number;
+    } | null;
+    count: number;
+}[]): number;

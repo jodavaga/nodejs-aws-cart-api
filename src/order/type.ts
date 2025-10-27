@@ -30,6 +30,7 @@ export type CreateOrderDto = {
 };
 
 export type PutCartPayload = {
+  items: any;
   product: { description: string; id: string; title: string; price: number };
   count: number;
 };

@@ -1,62 +1,73 @@
 import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
-import { Cart, CartStatuses } from '../models';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Cart } from '../models/cart.entity';
+import { CartItem } from '../models/cart-item.entity';
+import { CartStatuses } from '../models';
 import { PutCartPayload } from '../../order/type';
 
 @Injectable()
 export class CartService {
-  private userCarts: Record<string, Cart> = {};
+  constructor(
+    @InjectRepository(Cart)
+    private cartRepo: Repository<Cart>,
+    @InjectRepository(CartItem)
+    private itemRepo: Repository<CartItem>,
+  ) {}
 
-  findByUserId(userId: string): Cart {
-    return this.userCarts[userId];
+  async findByUserId(userId: string): Promise<Cart | null> {
+    return this.cartRepo.findOne({
+      where: { userId: userId, status: CartStatuses.OPEN },
+      relations: ['items'],
+    });
   }
 
-  createByUserId(user_id: string): Cart {
-    const timestamp = Date.now();
-
-    const userCart = {
-      id: randomUUID(),
-      user_id,
-      created_at: timestamp,
-      updated_at: timestamp,
+  async createByUserId(userId: string): Promise<Cart> {
+    const cart = this.cartRepo.create({
+      userId,
       status: CartStatuses.OPEN,
       items: [],
-    };
+    });
 
-    this.userCarts[user_id] = userCart;
-
-    return userCart;
+    return this.cartRepo.save(cart);
   }
 
-  findOrCreateByUserId(userId: string): Cart {
-    const userCart = this.findByUserId(userId);
+  async findOrCreateByUserId(userId: string): Promise<Cart> {
+    const existing = await this.findByUserId(userId);
+    return existing ?? this.createByUserId(userId);
+  }
 
-    if (userCart) {
-      return userCart;
+  async updateByUserId(userId: string, payload: PutCartPayload): Promise<Cart> {
+    const cart = await this.findOrCreateByUserId(userId);
+
+    let item = await this.itemRepo.findOne({
+      where: {
+        cart: { id: cart.id },
+        productId: payload.product.id,
+      },
+    });
+
+    if (!item && payload.count > 0) {
+      item = this.itemRepo.create({
+        cart,
+        productId: payload.product.id,
+        count: payload.count,
+      });
+      await this.itemRepo.save(item);
+    } else if (item && payload.count === 0) {
+      await this.itemRepo.remove(item);
+    } else if (item) {
+      item.count = payload.count;
+      await this.itemRepo.save(item);
     }
 
-    return this.createByUserId(userId);
+    await this.cartRepo.save(cart);
+
+    return this.findOrCreateByUserId(userId);
   }
 
-  updateByUserId(userId: string, payload: PutCartPayload): Cart {
-    const userCart = this.findOrCreateByUserId(userId);
-
-    const index = userCart.items.findIndex(
-      ({ product }) => product.id === payload.product.id,
-    );
-
-    if (index === -1) {
-      userCart.items.push(payload);
-    } else if (payload.count === 0) {
-      userCart.items.splice(index, 1);
-    } else {
-      userCart.items[index] = payload;
-    }
-
-    return userCart;
-  }
-
-  removeByUserId(userId: string): void {
-    delete this.userCarts[userId];
+  async removeByUserId(userId: string): Promise<void> {
+    const cart = await this.findByUserId(userId);
+    if (cart) await this.cartRepo.remove(cart);
   }
 }
