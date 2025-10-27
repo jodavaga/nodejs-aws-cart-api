@@ -7,6 +7,8 @@ import {
 import { AppModule } from './app.module';
 import { Handler, Context, Callback } from 'aws-lambda';
 import serverlessExpress from '@vendia/serverless-express';
+import { Cart } from './cart/models/cart.entity';
+import { CartItem } from './cart/models/cart-item.entity';
 
 let server: Handler;
 
@@ -21,21 +23,34 @@ async function bootstrapServer() {
 
 export async function getDbCredentials() {
   const client = new SecretsManagerClient({});
-  const arn = process.env.DB_SECRET_ARN!;
+  const command = new GetSecretValueCommand({
+    SecretId: process.env.DB_SECRET_ARN!,
+  });
+  const response = await client.send(command);
 
-  const secretData = await client.send(
-    new GetSecretValueCommand({ SecretId: arn }),
-  );
+  const creds = JSON.parse(response.SecretString!);
 
-  const secret = JSON.parse(secretData.SecretString!);
-
-  return {
-    username: secret.username,
-    password: secret.password,
-    host: process.env.DB_HOST,
+  const config = {
+    type: 'postgres',
+    host: process.env.DB_HOST!,
     port: Number(process.env.DB_PORT || 5432),
-    database: 'cartdb',
+    username: creds.username,
+    password: creds.password,
+    database: process.env.DB_NAME || 'cartdb',
+    entities: [Cart, CartItem],
+    synchronize: true,
+    ssl: false,
   };
+
+  console.log('DB CONFIG', {
+    host: config.host,
+    port: config.port,
+    username: config.username,
+    database: config.database,
+    ssl: config.ssl,
+  });
+
+  return config;
 }
 
 export const handler = async (

@@ -28,11 +28,14 @@ import { CartItem } from './cart/models/cart-item.entity';
           password: creds.password,
           database: creds.database,
           entities: [Cart, CartItem],
-          synchronize: true, // ✅ auto create DB tables
+          synchronize: true,
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
         };
       },
     }),
-    TypeOrmModule.forFeature([Cart, CartItem]),
   ],
   controllers: [AppController],
   providers: [],
