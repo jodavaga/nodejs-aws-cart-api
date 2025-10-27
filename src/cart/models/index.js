@@ -1,0 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CartStatuses = void 0;
+var CartStatuses;
+(function (CartStatuses) {
+    CartStatuses["OPEN"] = "OPEN";
+    CartStatuses["STATUS"] = "STATUS";
+})(CartStatuses || (exports.CartStatuses = CartStatuses = {}));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSxJQUFZLFlBR1g7QUFIRCxXQUFZLFlBQVk7SUFDdEIsNkJBQWEsQ0FBQTtJQUNiLGlDQUFpQixDQUFBO0FBQ25CLENBQUMsRUFIVyxZQUFZLDRCQUFaLFlBQVksUUFHdkIiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZW51bSBDYXJ0U3RhdHVzZXMge1xuICBPUEVOID0gJ09QRU4nLFxuICBTVEFUVVMgPSAnU1RBVFVTJyxcbn1cblxuZXhwb3J0IHR5cGUgUHJvZHVjdCA9IHtcbiAgaWQ6IHN0cmluZztcbiAgdGl0bGU6IHN0cmluZztcbiAgZGVzY3JpcHRpb246IHN0cmluZztcbiAgcHJpY2U6IG51bWJlcjtcbn07XG5cbmV4cG9ydCB0eXBlIENhcnRJdGVtID0ge1xuICBwcm9kdWN0OiBQcm9kdWN0O1xuICBjb3VudDogbnVtYmVyO1xufTtcblxuZXhwb3J0IHR5cGUgQ2FydCA9IHtcbiAgaWQ6IHN0cmluZztcbiAgdXNlcl9pZDogc3RyaW5nO1xuICBjcmVhdGVkX2F0OiBudW1iZXI7XG4gIHVwZGF0ZWRfYXQ6IG51bWJlcjtcbiAgc3RhdHVzOiBDYXJ0U3RhdHVzZXM7XG4gIGl0ZW1zOiBDYXJ0SXRlbVtdO1xufTtcbiJdfQ==

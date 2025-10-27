@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUserIdFromRequest = getUserIdFromRequest;
+/**
+ * @param {AppRequest} request
+ * @returns {string}
+ */
+function getUserIdFromRequest(request) {
+    return request.user?.id ?? '';
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQU1BLG9EQUVDO0FBTkQ7OztHQUdHO0FBQ0gsU0FBZ0Isb0JBQW9CLENBQUMsT0FBbUI7SUFDdEQsT0FBTyxPQUFPLENBQUMsSUFBSSxFQUFFLEVBQUUsSUFBSSxFQUFFLENBQUM7QUFDaEMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEFwcFJlcXVlc3QgfSBmcm9tICcuLi9tb2RlbHMnO1xuXG4vKipcbiAqIEBwYXJhbSB7QXBwUmVxdWVzdH0gcmVxdWVzdFxuICogQHJldHVybnMge3N0cmluZ31cbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGdldFVzZXJJZEZyb21SZXF1ZXN0KHJlcXVlc3Q6IEFwcFJlcXVlc3QpOiBzdHJpbmcge1xuICByZXR1cm4gcmVxdWVzdC51c2VyPy5pZCA/PyAnJztcbn1cbiJdfQ==

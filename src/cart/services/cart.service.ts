@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Cart, CartStatuses } from '../models';
-import { PutCartPayload } from 'src/order/type';
+import { PutCartPayload } from '../../order/type';
 
 @Injectable()
 export class CartService {
@@ -56,7 +56,7 @@ export class CartService {
     return userCart;
   }
 
-  removeByUserId(userId): void {
-    this.userCarts[userId] = null;
+  removeByUserId(userId: string): void {
+    delete this.userCarts[userId];
   }
 }
